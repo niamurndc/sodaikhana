@@ -78,6 +78,7 @@ Route::group(['middleware' => ['auth:sanctum', 'admin']], function(){
 
     // order routes
     Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/order/sms', [OrderController::class, 'ordersms']);
     Route::post('/order/edit/{id}', [OrderController::class, 'update']);
     Route::delete('/order/delete/{id}', [OrderController::class, 'delete']);
 

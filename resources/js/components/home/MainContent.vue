@@ -8,24 +8,22 @@
       <div class="row">
         <div class="col-md-3">
           <h4>Sodaikhana</h4>
-          <p><a href="#" class="text-white">Home</a></p>
-          <p><a href="#" class="text-white">Shop</a></p>
-          <p><a href="#" class="text-white">About</a></p>
-          <p><a href="#" class="text-white">Contact</a></p>
+          <p><a href="/" class="text-white">Home</a></p>
+          <p><a href="/" class="text-white">Cart</a></p>
+          <p><router-link to="/user/checkout" class="text-white">Checkout</router-link></p>
         </div>
         <div class="col-md-3">
           <h4></h4>
-          <p><a href="#" class="text-white">Login</a></p>
-          <p><a href="#" class="text-white">Register</a></p>
-          <p><a href="#" class="text-white">Account</a></p>
-          <p><a href="#" class="text-white">Checkout</a></p>
+          <p><router-link to="/login" class="text-white">Login</router-link></p>
+          <p><router-link to="/register" class="text-white">Register</router-link></p>
+          <p><router-link to="/user/profile" class="text-white">Acount</router-link></p>
+          
         </div>
         <div class="col-md-3">
           <h4>About</h4>
           <p><a href="#" class="text-white">About Us</a></p>
-          <p><a href="#" class="text-white">Payment</a></p>
           <p><a href="#" class="text-white">Privacy Policy</a></p>
-          <p><a href="#" class="text-white">Terms & Conditions</a></p>
+          <p><p><router-link to="/terms-conditions" class="text-white">Terms & Conditions</router-link></p>
         </div>
         <div class="col-md-3">
           <h4>Social Links</h4>

@@ -67,19 +67,21 @@ export default {
     },
 
     showChild(id){
-      if(this.child == 0){
-        this.child = id
+      if(this.child == id){
+        this.child = 0
       }else{
         this.child = 0
+        this.child = id
       }
       
     },
 
     showGChild(id){
-      if(this.gchild == 0){
-        this.gchild = id
+      if(this.gchild == id){
+        this.gchild = 0
       }else{
         this.gchild = 0
+        this.gchild = id
       }
     },
 

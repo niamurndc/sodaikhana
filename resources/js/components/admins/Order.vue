@@ -63,6 +63,29 @@
     </div>
     <!-- modal end -->
 
+    <!-- sms Modal -->
+    <div v-if="getSmsModal" class="modal" aria-hidden="true" tabindex="-1">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="text-primary">Send SMS To Customer</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span v-on:click="destroyModal" aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            
+            <textarea v-model="smstext" rows="3" class="form-control"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button v-on:click="destroyModal" type="button" class="btn btn-secondary">Close</button>
+            <button type="button" v-on:click="sendSms" class="btn btn-primary">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- sms modal end -->
+
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">Orders</h1>
       <div class="btn-toolbar mb-2 mb-md-0">
@@ -78,6 +101,7 @@
             <th>#</th>
             <th>Name</th>
             <th>Phone</th>
+            <th></th>
             <th>Area</th>
             <th>Total</th>
             <th>Time</th>
@@ -88,8 +112,9 @@
         <tbody>
           <tr v-for="order in allorders" :key="order.id">
             <td>{{order.id}}</td>
-            <td>{{order.name}}</td>
-            <td>{{order.phone}}</td>
+            <td v-on:click="viewOrder(order.id)">{{order.name}}</td>
+            <td v-on:click="viewOrder(order.id)">{{order.phone}}</td>
+            <td><button v-on:click="showSmsModal(order.phone)" class="btn btn-primary btn-sm" >SMS</button></td>
             <td>{{order.area}}</td>
             <td>{{order.subtotal}}</td>
             <td>{{order.created}}</td>
@@ -100,7 +125,7 @@
               <p v-else-if="order.status == 3" class="m-0 text-danger">Failed</p>
               <p v-else class="m-0 text-success">Complete</p>
             </td>
-            <td><i v-on:click="viewOrder(order.id)" class="fa fa-pencil text-primary mr-1 pinter"></i><i v-on:click="deleteOrder(order.id)" class="fa fa-trash text-danger"></i></td>
+            <td><i v-on:click="deleteOrder(order.id)" class="fa fa-trash text-danger"></i></td>
           </tr>
         </tbody>
       </table>
@@ -116,7 +141,10 @@
         order_id: 0,
         active: {},
         getModal: false,
+        getSmsModal: false,
         config: {},
+        phone: null,
+        smstext: '',
       }
     },
     mounted() {
@@ -198,9 +226,44 @@
       },
 
       destroyModal(){
+        this.getSmsModal = false
         this.getModal = false
         this.order_id = 0
         this.active = {}
+        this.phone = null
+      },
+
+      showSmsModal(phone){
+        this.getSmsModal = true
+        this.phone = phone
+      },
+
+      sendSms(){
+        console.log(this.smstext)
+        const token = localStorage.getItem('info')
+
+        this.config = {
+          headers: {
+            'Content-Type' : 'application/json',
+            'Accept' : 'application/json',
+            'Authorization' : 'Bearer '+token
+          }
+        }
+
+        axios.post(`/api/order/sms`, {
+          phone: this.phone,
+          smstext: this.smstext
+          }, this.config)
+          .then(data => {
+            console.log(data);
+            if(data.status == 200){
+              this.$toasted.success("Send SMS Successful", {
+                duration: 3000,
+              });
+              this.destroyModal()
+            }
+          })
+          .catch(err => console.log(err))
       },
 
       deleteOrder(id){

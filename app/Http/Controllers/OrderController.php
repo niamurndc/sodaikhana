@@ -105,7 +105,7 @@ class OrderController extends Controller
             "type" => "text",
             "contacts" => "88".$req->phone,
             "senderid" => "8809601001272",
-            "msg" => "Hi ".$req->name.", ".$req->smstext." Sodaikhana.com",
+            "msg" => $req->smstext,
         ];
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -116,6 +116,6 @@ class OrderController extends Controller
         curl_exec($ch);
         curl_close($ch);
         
-        return redirect()->back()->with('message', 'Order SMS send Successfuly');
+        return response(['message' => 'Order SMS send Successfuly']);
     }
 }

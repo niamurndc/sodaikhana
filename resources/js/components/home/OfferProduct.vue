@@ -42,28 +42,27 @@
       </div>
     </div>
     <!-- modal end -->
-    <img @click="showModal(product.id)" :src="product.image" class="product-image mb-2" alt="">
-    <h5 @click="showModal(product.id)" class="product-title">{{product.title}}</h5>
-    <p v-if="product.attri1 == null" class="m-0">{{product.attri}}</p>
-    <select v-else v-model="attribute" v-on:change="changePrice" class="form-control-sm">
-      <option :value="product.val1">{{product.attri1}}</option>
-      <option v-if="product.attri2 != null" :value="product.val2">{{product.attri2}}</option>
-      <option v-if="product.attri3 != null" :value="product.val3">{{product.attri3}}</option>
-    </select>
-    <p class="m-0">
-        <b>{{price}} BDT </b>
-    </p>
 
-    <div v-if="product.stock !== 'on'">
-      <button v-if="showbtn" @click="decCart(product.id)" class="btn btn-sm btn-outline-secondary">-1</button>
-      <button  @click="addtoCart(product.id)" class="btn btn-add-cart btn-sm">Add to Cart</button> <button v-if="showbtn" @click="incCart(product.id)" class="btn btn-sm btn-outline-secondary">+1</button>
-    </div>
-    
-    <div v-else>
-      <p class="text-danger">Stock Out</p>
-      <button @click="sendRequest(product.id)" class="btn btn-add-cart btn-sm">Send Request</button>
-    </div>
-
+    <div class="row">
+      <div class="col-6">
+        <img @click="showModal(product.id)" :src="product.image"  alt="offer image" class="card-image" height="150px" width="100%">
+      </div>
+      <div class="col-6 p-2">
+        <h5 @click="showModal(product.id)" class="">{{product.title}}</h5>
+        
+        <h6 class="m-0"><strike class="text-danger">{{product.offprice}} BDT</strike></h6>
+        <span class="mt-2">Offer price</span>
+        <h3 class="m-0">{{product.price}} BDT</h3>
+        <div v-if="product.stock !== 'on'">
+          <button v-if="showbtn" @click="decCart(product.id)" class="btn btn-sm btn-outline-secondary">-1</button>
+          <button  @click="addtoCart(product.id)" class="btn btn-add-cart btn-sm">Add to Cart</button> <button v-if="showbtn" @click="incCart(product.id)" class="btn btn-sm btn-outline-secondary">+1</button>
+        </div>
+        
+        <div v-else>
+          <p class="text-danger">Stock Out</p>
+        </div>
+      </div>
+    </div> 
   </div>
 </template>
 
@@ -184,7 +183,7 @@ export default {
             }
         }
 
-        axios.get(`/api/request/add/${id}`, this.config)
+        axios.get(`/api/request/add/${this.pid}`, this.config)
           .then(res => {
             this.$toasted.success("Request send successfuly", {
               duration: 3000,

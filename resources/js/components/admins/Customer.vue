@@ -57,15 +57,15 @@
         <tbody>
           <tr v-for="customer in allcustomers" :key="customer.id">
             <td>{{customer.id}}</td>
-            <td>{{customer.name}}</td>
-            <td>{{customer.phone}}</td>
+            <td v-on:click="viewCustomer(customer.id)">{{customer.name}}</td>
+            <td v-on:click="viewCustomer(customer.id)">{{customer.phone}}</td>
             <td>{{customer.created}}</td>
             <td>
               <p v-if="customer.status == '1'" class="m-0 text-success">Active</p>
               <p v-else-if="customer.status == '0'" class="m-0 text-warning">Inactive</p>
               <p v-else class="m-0 text-danger">Baned</p>
             </td>
-            <td><i v-on:click="viewCustomer(customer.id)" class="fa fa-pencil text-primary mr-1 pinter"></i><i v-on:click="deleteCustomer(customer.id)" class="fa fa-trash text-danger"></i></td>
+            <td><i v-on:click="deleteCustomer(customer.id)" class="fa fa-trash text-danger"></i></td>
           </tr>
         </tbody>
       </table>

@@ -3,16 +3,6 @@
     <div class="hero">
       <img src="/image/cover2.jpg" alt="cover image" width="100%">
     </div>
-    <div class="hero-2 mt-4">
-      <div class="row p-0">
-        <div class="col-md-6">
-          <img src="/image/cover1.jpg" alt="cover image" width="100%">
-        </div>
-        <div class="col-md-6">
-          <img src="/image/cover3.jpg" alt="cover image" width="100%">
-        </div>
-      </div>
-    </div>
 
     <div class="offer text-center my-5">
       <h2>Special Offer</h2>
@@ -20,19 +10,7 @@
         <div class="row">
           <div v-for="offer in offerproducts" :key="offer.id" class="col-md-4">
             <div class="card p-3 mb-4">
-              <div class="row">
-                <div class="col-6">
-                  <img :src="offer.image" alt="offer image" class="card-image" height="150px" width="100%">
-                </div>
-                <div class="col-6 p-2">
-                  <h5 class="">{{offer.title}}</h5>
-                  
-                  <h6 class="m-0">Actual price: <strike class="text-danger">{{offer.price}} BDT</strike></h6>
-                  <span class="mt-2">Offer price</span>
-                  <h3 class="m-0">{{offer.offprice}} BDT</h3>
-                  <button class="btn btn-add-cart btn-sm mt-2">Add to Cart</button>
-                </div>
-              </div>
+              <OfferProduct :product="offer" v-on:updateCart="updateCart" />
             </div>
           </div>
         </div>
@@ -42,9 +20,6 @@
     <div class="show-section py-5">
       <div class="container">
         <div class="row">
-          <div class="col-md-6">
-            <img src="/image/image1.jpg" alt="delivery box" width="100%">
-          </div>
           <div class="col-md-6 d-flex align-items-center">
             <h1>We Are Always Ready To Deliver Your <span class="text-pink"> All Needs Safely</span></h1>
           </div>
@@ -67,9 +42,11 @@
 
 <script>
   import SingleProduct from './SingleProduct.vue'
+  import OfferProduct from './OfferProduct.vue'
   export default {
     components: {
-      SingleProduct
+      SingleProduct,
+      OfferProduct,
     },
 
     data(){

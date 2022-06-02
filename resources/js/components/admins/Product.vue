@@ -9,7 +9,16 @@
       </div>
     </div>
 
-    <h3>All Products</h3>
+    
+    <div class="row mb-4">
+      <div class="col-md-6"><h3>All Products</h3></div>
+      <div class="col-md-6 text-right">
+        <div class="row">
+          <input @keyup="searchProductsId" type="number" v-model="pid" class="form-control col-md-6" placeholder="Search ID..">
+          <input @keyup="searchProducts" type="text" v-model="search" class="form-control col-md-6" placeholder="Search product....">
+        </div>
+      </div>
+    </div>
     <div class="table-responsive">
       <table class="table table-striped table-sm">
         <thead>
@@ -29,7 +38,7 @@
           <tr v-for="product in allproducts" :key="product.id">
             <td>{{product.id}}</td>
             <td class="text-center"><img :src="product.image" alt="product image" class="rounded" height="30px" width="30px"></td>
-            <td>{{product.title}}</td>
+            <td><router-link class="text-dark" :to="{ path: `/admin/editproduct/${product.id}` }">{{product.title}}</router-link></td>
             <td><strike>{{product.offprice}}</strike> {{product.price}}</td>
             <td>{{product.attri}}</td>
             <td>{{product.brand.title}}</td>
@@ -41,11 +50,31 @@
               <p v-if="product.popular == 'on'" class="m-0 text-success">Popular</p>
               <p v-if="product.stock == 'on'" class="m-0 text-danger">Stock Out</p>
             </td>
-            <td><i v-on:click="editproduct(product.id)" class="fa fa-pencil text-primary mr-2"></i><i v-on:click="deleteProduct(product.id)" class="fa fa-trash text-danger"></i></td>
+            <td><i v-on:click="deleteProduct(product.id)" class="fa fa-trash text-danger"></i></td>
           </tr>
         </tbody>
       </table>
     </div>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><span class="page-link" @click="paginate(1)">1</span></li>
+
+        <!-- page 2 -->
+
+        <li class="page-item"><span class="page-link" @click="paginate(links.current_page - 1)">{{links.current_page - 1}}</span></li>
+
+        <!-- link 3 -->
+
+        <li class="page-item active"><span class="page-link" @click="paginate(links.current_page)">{{links.current_page}}</span></li>
+
+        <!-- link 4 -->
+
+        <li class="page-item"><span class="page-link" @click="paginate(links.current_page + 1)">{{links.current_page + 1}}</span></li>
+
+
+        <li class="page-item"><span class="page-link" v-on:click="paginate(links.last_page)">{{links.last_page}}</span></li>
+      </ul>
+    </nav>
   </main>
 </template>
 
@@ -54,25 +83,51 @@
     data(){
       return{
         allproducts: [],
-        config: {}
+        config: {},
+        page: 1,
+        links: [],
+        search: '',
+        pid: 0
       }
     },
 
     mounted() {
-      this.getProducts()
+      
+      this.getProducts(this.page)
     },
 
     methods: {
-      getProducts(){
-        axios.get('/api/products')
+      paginate(page){
+        console.log(page)
+        this.page = page
+        this.getProducts(this.page)
+      },
+
+      getProducts(page){
+        axios.get(`/api/products?page=${page}`)
               .then(data => {
                 this.allproducts = data.data.data
+                this.links = data.data.meta
               })
               .catch(err => console.log(err))
       },
 
-      editproduct(id){
-        this.$router.push({ path: `/admin/editproduct/${id}` })
+      searchProducts(){
+        if(this.search.length > 3){
+          axios.get(`/api/product/find/${this.search}`)
+                .then(data => {
+                  this.allproducts = data.data.data
+                })
+                .catch(err => console.log(err))
+        }
+      },
+
+      searchProductsId(){
+        axios.get(`/api/product/findid/${this.pid}`)
+              .then(data => {
+                this.allproducts = data.data.data
+              })
+              .catch(err => console.log(err))
       },
 
       deleteProduct(id){
@@ -98,4 +153,10 @@
     }
   }
 </script>
+
+<style scoped>
+.page-link{
+  cursor: pointer;
+}
+</style>
 

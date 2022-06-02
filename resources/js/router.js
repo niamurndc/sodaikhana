@@ -20,6 +20,7 @@ import Forgot from './components/auth/Forgot.vue'
 import FontOrder from './components/fontauth/Order.vue'
 import Profile from './components/fontauth/Profile.vue'
 import List from './components/fontauth/List.vue'
+import Terms from './components/home/Terms.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,10 @@ const routes = [
       {
         path: 'search/:search',
         component: Search
+      },
+      {
+        path: 'terms-conditions',
+        component: Terms
       }
     ]
   },

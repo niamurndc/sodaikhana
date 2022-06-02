@@ -23,7 +23,7 @@ class RequestController extends Controller
         $request = new ModelsRequest();
 
         $request->name = auth()->user()->name;
-        $request->phone = auth()->user()->name;
+        $request->phone = auth()->user()->phone;
         $request->product_id = $id;
 
         $request->save();
